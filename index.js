@@ -19,7 +19,7 @@ app.get('/health', (req, res) => {
   res.json({ healthy: true })
 })
 
-app.post('/record', (req, res) => {
+app.get('/record', (req, res) => {
   log('POST /record')
   console.log(req.query)
 
@@ -36,8 +36,8 @@ app.post('/record', (req, res) => {
   res.send(twiml.toString())
 })
 
-app.post('/recorded', (req, res) => {
-  log('POST /record')
+app.get('/recorded', (req, res) => {
+  log('POST /recorded')
   console.log(req.query)
 
   res.sendStatus(200)
