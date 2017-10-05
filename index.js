@@ -30,8 +30,6 @@ app.get('/health', (req, res) => {
  * Stores information about the call in global callsInProgress
  */
 app.get('/record', (req, res) => {
-  log('POST /record')
-
   const {
     CallerName,
     FromCity,
@@ -51,6 +49,8 @@ app.get('/record', (req, res) => {
     Called,
     CallSid
   }
+
+  log('POST /record from phone %s', Called)
 
   const twiml = new VoiceResponse()
 
