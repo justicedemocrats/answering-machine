@@ -1,0 +1,28 @@
+{
+  "name": "osdi-answering-machine",
+  "version": "1.0.0",
+  "description": "A little Twilio based answering machine – records a call and posts a webhook with a url to the recording. Edit",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/justicedemocrats/osdi-answering-machine.git"
+  },
+  "keywords": [
+    "osdi",
+    "twilio"
+  ],
+  "author": "Ben Packer",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/justicedemocrats/osdi-answering-machine/issues"
+  },
+  "homepage": "https://github.com/justicedemocrats/osdi-answering-machine#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.1",
+    "twilio": "^3.7.0"
+  }
+}
