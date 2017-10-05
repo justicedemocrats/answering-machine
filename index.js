@@ -11,8 +11,6 @@ const RECORDING_STATUS_CALLBACK =
 const EXTERNAL_WEBHOOK_URL =
   process.env.EXTERNAL_WEBHOOK_URL || 'localhost:4000/api/contact-helper'
 
-app.use(bodyParser.urlencoded())
-
 app.get('/health', (req, res) => {
   log('GET /health')
 
@@ -27,7 +25,8 @@ app.get('/record', (req, res) => {
 
   twiml.record({
     maxLength: 60,
-    recordingStatusCallback: process.env.RECORDING_STATUS_CALLBACK
+    recordingStatusCallback: process.env.RECORDING_STATUS_CALLBACK,
+    recordingStatusCallbackMethod: 'GET'
   })
 
   twiml.hangup()
