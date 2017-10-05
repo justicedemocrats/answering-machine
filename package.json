@@ -1,6 +1,10 @@
 {
   "name": "osdi-answering-machine",
   "version": "1.0.0",
+  "engines": {
+    "node": "v8.6.0",
+    "npm": "5.3.0"
+  },
   "description": "A little Twilio based answering machine – records a call and posts a webhook with a url to the recording. Edit",
   "main": "index.js",
   "scripts": {

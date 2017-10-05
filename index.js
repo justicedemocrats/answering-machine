@@ -13,6 +13,12 @@ const EXTERNAL_WEBHOOK_URL =
 
 app.use(bodyParser.json())
 
+app.get('/health', (req, res) => {
+  log('GET /health')
+
+  res.json({ healthy: true })
+})
+
 app.post('/record', (req, res) => {
   log('POST /record')
   console.dir(req.body)
