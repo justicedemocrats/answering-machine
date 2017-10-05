@@ -95,7 +95,8 @@ app.get('/recorded', (req, res) => {
     given_name: CallerName.split(' ')[1],
     family_name: CallerName.split(' ')[0],
     postal_addresses: [{ locality: FromCity, region: FromState }],
-    phone_numbers: [{ number: Caller, primary: true }]
+    phone_numbers: [{ number: Caller, primary: true }],
+    email_addresses: []
   }
 
   request
