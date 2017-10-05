@@ -8,7 +8,7 @@
   "description": "A little Twilio based answering machine – records a call and posts a webhook with a url to the recording. Edit",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
