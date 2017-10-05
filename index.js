@@ -88,8 +88,7 @@ app.get('/recorded', (req, res) => {
     FromZip,
     FromState,
     Caller,
-    Called,
-    CallSid
+    Called
   } = callsInProgress[CallSid]
 
   const person = {
