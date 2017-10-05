@@ -3,7 +3,7 @@ const VoiceResponse = require('twilio').twiml.VoiceResponse
 const bodyParser = require('body-parser')
 const log = require('debug')('answering-machine')
 const request = require('superagent')
-const phones = require('phones')
+const phones = require('./phones')
 const app = express()
 
 const RECORDING_STATUS_CALLBACK =
