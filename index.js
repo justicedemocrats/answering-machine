@@ -11,7 +11,7 @@ const RECORDING_STATUS_CALLBACK =
 const EXTERNAL_WEBHOOK_URL =
   process.env.EXTERNAL_WEBHOOK_URL || 'localhost:4000/api/contact-helper'
 
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded())
 
 app.get('/health', (req, res) => {
   log('GET /health')
