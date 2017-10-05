@@ -21,7 +21,7 @@ app.get('/health', (req, res) => {
 
 app.post('/record', (req, res) => {
   log('POST /record')
-  console.log(req.body)
+  console.log(req.params)
 
   const twiml = new VoiceResponse()
 
@@ -38,7 +38,7 @@ app.post('/record', (req, res) => {
 
 app.post('/recorded', (req, res) => {
   log('POST /record')
-  console.log(req.body)
+  console.log(req.params)
 
   res.sendStatus(200)
 })
