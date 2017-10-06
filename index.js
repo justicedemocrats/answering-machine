@@ -12,6 +12,8 @@ const RECORDING_STATUS_CALLBACK =
 const EXTERNAL_WEBHOOK_URL =
   process.env.EXTERNAL_WEBHOOK_URL || 'localhost:4000/api/contact-helper'
 
+const SURGE_SUBDOMAIN = process.env.SURGE_SUBDOMAIN
+
 const callsInProgress = {}
 
 /*
@@ -55,7 +57,10 @@ app.get('/record', (req, res) => {
   const twiml = new VoiceResponse()
 
   if (phones[Called].voiceMessageUrl)
-    twiml.play({}, phones[Called].voiceMessageUrl)
+    twiml.play(
+      {},
+      `https://${SURGE_SUBDOMAIN}.surge.sh/${phones[Called].voiceMessageUrl}`
+    )
 
   twiml.record({
     maxLength: 60,
