@@ -8,7 +8,7 @@ const EXTERNAL_WEBHOOK_URL =
 const getPersonId = async (person, add_tags) => {
   const response = await new Promise((resolve, reject) =>
     request
-      .post(EXTERNAL_WEBHOOK_URL)
+      .post(EXTERNAL_WEBHOOK_URL + '/signup')
       .send({ person, add_tags })
       .end((err, res) => {
         if (err) return reject(err)
