@@ -37,8 +37,8 @@ const getContactor = async ({
 }) => {
   return await getPersonId(
     {
-      given_name: CallerName.split(' ')[1],
-      family_name: CallerName.split(' ')[0],
+      given_name: CallerName && CallerName.split(' ')[1],
+      family_name: CallerName && CallerName.split(' ')[0],
       postal_addresses: [{ locality: FromCity, region: FromState }],
       phone_numbers: [{ number: Caller, primary: true }],
       email_addresses: []
