@@ -80,6 +80,7 @@ const onRecorded = async params => {
     custom_fields: { recording_url: RecordingUrl },
     identifiers: [`twilio:${CallSid}`],
     origin_system: 'twilio',
+    action_date: new Date(),
     contact_type: 'phone',
     status_code: 'left-voicemail',
     success: true
@@ -116,6 +117,8 @@ const onHangup = async params => {
     contactor,
     identifiers: [`twilio:${CallSid}`],
     origin_system: 'twilio',
+    action_date: new Date(),
+    contact_type: 'phone',
     status_code: 'hungup',
     success: false
   }
