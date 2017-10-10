@@ -1,5 +1,6 @@
 const request = require('superagent')
 const phones = require('./phones')
+const log = require('debug')('answering-machine:handlers')
 
 const EXTERNAL_WEBHOOK_BASE =
   process.env.EXTERNAL_WEBHOOK_URL || 'localhost:4000/api'
