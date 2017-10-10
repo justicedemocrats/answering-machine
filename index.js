@@ -5,12 +5,10 @@ const log = require('debug')('answering-machine')
 const request = require('superagent')
 const phones = require('./phones')
 const app = express()
+const { onHangup, onRecorded } = require('./handlers')
 
 const RECORDING_STATUS_CALLBACK =
   process.env.RECORDING_STATUS_CALLBACK || 'localhost:3000/recorded'
-
-const EXTERNAL_WEBHOOK_URL =
-  process.env.EXTERNAL_WEBHOOK_URL || 'localhost:4000/api/contact-helper'
 
 const SURGE_SUBDOMAIN = process.env.SURGE_SUBDOMAIN
 
@@ -43,24 +41,27 @@ app.get('/record', (req, res) => {
   } = req.query
 
   callsInProgress[CallSid] = {
-    CallerName,
-    FromCity,
-    FromZip,
-    FromState,
-    Caller,
-    Called,
-    CallSid
+    data: {
+      CallerName,
+      FromCity,
+      FromZip,
+      FromState,
+      Caller,
+      Called,
+      CallSid
+    },
+    timeout: setTimeout(() => onHangup(req.query), 10000)
   }
 
-  log('POST /record from phone %s', Called)
+  log('GET /record from phone: %s, name: %s', Called, CallerName)
 
   const twiml = new VoiceResponse()
+  const audioResponse = `https://${SURGE_SUBDOMAIN}.surge.sh/${phones[Called]
+    .voiceMessageUrl}`
 
-  if (phones[Called].voiceMessageUrl)
-    twiml.play(
-      {},
-      `https://${SURGE_SUBDOMAIN}.surge.sh/${phones[Called].voiceMessageUrl}`
-    )
+  log('Answering with audio %s', audioResponse)
+
+  if (phones[Called].voiceMessageUrl) twiml.play({}, audioResponse)
 
   twiml.record({
     maxLength: 60,
@@ -81,7 +82,7 @@ app.get('/record', (req, res) => {
  * Does posting to the webhook
  */
 app.get('/recorded', (req, res) => {
-  log('POST /recorded')
+  log('GET /recorded')
 
   res.sendStatus(200)
 
@@ -94,26 +95,20 @@ app.get('/recorded', (req, res) => {
     FromState,
     Caller,
     Called
-  } = callsInProgress[CallSid]
+  } = callsInProgress[CallSid].data
 
-  const person = {
-    given_name: CallerName.split(' ')[1],
-    family_name: CallerName.split(' ')[0],
-    postal_addresses: [{ locality: FromCity, region: FromState }],
-    phone_numbers: [{ number: Caller, primary: true }],
-    email_addresses: []
-  }
+  clearTimeout(callsInProgress[CallSid].timeout)
 
-  request
-    .post(EXTERNAL_WEBHOOK_URL)
-    .send({ person, add_tags: [phones[Called].callTag] })
-    .end((err, res) => {
-      log(
-        'Successfully added %s, who called campaign %s',
-        Called,
-        phones[Called].callTag
-      )
-    })
+  onRecorded({
+    RecordingUrl,
+    CallSid,
+    CallerName,
+    FromCity,
+    FromZip,
+    FromState,
+    Caller,
+    Called
+  })
 
   callsInProgress[CallSid] = undefined
   delete callsInProgress[CallSid]
