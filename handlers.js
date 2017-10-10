@@ -2,7 +2,7 @@ const request = require('superagent')
 const phones = require('./phones')
 const log = require('debug')('answering-machine:handlers')
 
-const EXTERNAL_WEBHOOK_BASE =
+const EXTERNAL_WEBHOOK_URL =
   process.env.EXTERNAL_WEBHOOK_URL || 'localhost:4000/api'
 
 const getPersonId = async (person, add_tags) => {
