@@ -67,6 +67,8 @@ const getTarget = async ({
 }
 
 const onRecorded = async params => {
+  log('Logging recorded contact with params %j', params)
+
   const [target, contactor] = await Promise.all([
     getContactor(params),
     getTarget(params)
@@ -94,6 +96,8 @@ const onRecorded = async params => {
 }
 
 const onHangup = async params => {
+  log('Logging hangup contact with params %j', params)
+
   const [target, contactor] = await Promise.all([
     getContactor(params),
     getTarget(params)
