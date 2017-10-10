@@ -11,8 +11,11 @@ const getPersonId = async (person, add_tags) => {
       .post(EXTERNAL_WEBHOOK_URL + '/signup')
       .send({ person, add_tags })
       .end((err, res) => {
-        if (err) return reject(err)
-        if (res.body.error) return reject(err)
+        if (err || res.body.error) {
+          log('Could not record contact: %j', err || res.body.error)
+          return reject(err || res.body.error)
+        }
+        
         log('Successfully added person %s', res.body.id)
         resolve(res.body)
       })
@@ -87,7 +90,11 @@ const onRecorded = async params => {
       .post(EXTERNAL_WEBHOOK_URL + '/record-contact')
       .send({ contact })
       .end((err, res) => {
-        if (err) return reject(err)
+        if (err) {
+          log('Could not record contact: %j', err)
+          return reject(err)
+        }
+
         log('Successfully added contact %s', res.body.id)
         return resolve(res.body)
       })
@@ -118,7 +125,11 @@ const onHangup = async params => {
       .post(EXTERNAL_WEBHOOK_URL + '/record-contact')
       .send({ contact })
       .end((err, res) => {
-        if (err) return reject(err)
+        if (err) {
+          log('Could not record contact: %j', err)
+          return reject(err)
+        }
+
         log('Successfully added contact %s', res.body.id)
         return resolve(res.body)
       })
