@@ -15,9 +15,9 @@ const getPersonId = async (person, add_tags) => {
           log('Could not record contact: %j', err || res.body.error)
           return reject(err || res.body.error)
         }
-        
+
         log('Successfully added person %s', res.body.id)
-        resolve(res.body)
+        return resolve(res.body.id)
       })
   )
 
