@@ -13,13 +13,7 @@ const getPersonId = async (person, add_tags) => {
       .end((err, res) => {
         if (err) return reject(err)
         if (res.body.error) return reject(err)
-
-        log(
-          'Successfully added %s, who called campaign %s',
-          Caller,
-          phones[Called].callTag
-        )
-
+        log('Successfully added person %s', res.body.id)
         resolve(res.body)
       })
   )
@@ -92,7 +86,11 @@ const onRecorded = async params => {
     request
       .post(EXTERNAL_WEBHOOK_URL + '/record-contact')
       .send({ contact })
-      .end((err, res) => (err ? reject(err) : resolve(res.body)))
+      .end((err, res) => {
+        if (err) return reject(err)
+        log('Successfully added contact %s', res.body.id)
+        return resolve(res.body)
+      })
   )
 }
 
@@ -119,7 +117,11 @@ const onHangup = async params => {
     request
       .post(EXTERNAL_WEBHOOK_URL + '/record-contact')
       .send({ contact })
-      .end((err, res) => (err ? reject(err) : resolve(res.body)))
+      .end((err, res) => {
+        if (err) return reject(err)
+        log('Successfully added contact %s', res.body.id)
+        return resolve(res.body)
+      })
   )
 }
 
