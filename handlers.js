@@ -139,4 +139,14 @@ const onHangup = async params => {
   )
 }
 
+const onText = async params => {
+  log('Logging text message with params %j', params)
+
+  // const [target, contactor] = await Promise.all([
+  //   getContactor(params),
+  //   getTarget(params)
+  // ])
+  return 'hi'
+}
+
 module.exports = { onHangup, onRecorded }

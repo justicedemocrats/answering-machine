@@ -56,12 +56,16 @@ app.get('/record', (req, res) => {
   log('GET /record from phone: %s, name: %s', Called, CallerName)
 
   const twiml = new VoiceResponse()
-  const audioResponse = `https://${SURGE_SUBDOMAIN}.surge.sh/${phones[Called]
-    .voiceMessageUrl}`
+
+  const audioResponse = `https://${SURGE_SUBDOMAIN}.surge.sh/${phones[Called].voiceMessageUrl}`
 
   log('Answering with audio %s', audioResponse)
 
-  if (phones[Called].voiceMessageUrl) twiml.play({}, audioResponse)
+  if (phones[Called].voiceMessageUrl)
+    twiml.play(
+      {},
+      audioResponse
+    )
 
   twiml.record({
     maxLength: 60,
@@ -112,6 +116,17 @@ app.get('/recorded', (req, res) => {
 
   callsInProgress[CallSid] = undefined
   delete callsInProgress[CallSid]
+})
+
+/*
+ * GET /sms
+ *
+ * Gets a callback once a text has been received
+ */
+app.get('sms', (req, res) => {
+  log('GET /sms')
+
+  res.sendStatus(200)
 })
 
 /*
