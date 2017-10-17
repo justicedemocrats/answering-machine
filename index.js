@@ -1,11 +1,11 @@
 const express = require('express')
-const VoiceResponse = require('twilio').twiml.VoiceResponse
+const {VoiceResponse, MessagingResponse} = require('twilio').twiml
 const bodyParser = require('body-parser')
 const log = require('debug')('answering-machine')
 const request = require('superagent')
 const phones = require('./phones')
 const app = express()
-const { onHangup, onRecorded } = require('./handlers')
+const { onHangup, onRecorded, onText } = require('./handlers')
 
 const RECORDING_STATUS_CALLBACK =
   process.env.RECORDING_STATUS_CALLBACK || 'localhost:3000/recorded'
@@ -123,10 +123,15 @@ app.get('/recorded', (req, res) => {
  *
  * Gets a callback once a text has been received
  */
-app.get('sms', (req, res) => {
+app.get('/sms', (req, res) => {
   log('GET /sms')
 
-  res.sendStatus(200)
+  const {Body, From, FromCity, FromCountry, FromState, FromZip, FromName, To, SmsMessageSid} = req.query
+  onText({Body, From, FromCity, FromCountry, FromState, FromZip, To, FromName, SmsMessageSid})
+
+  const twiml = new MessagingResponse()
+  res.writeHead(200, {'Content-Type': 'text/xml'})
+  res.end(twiml.toString())
 })
 
 /*

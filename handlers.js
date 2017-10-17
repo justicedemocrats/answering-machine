@@ -142,11 +142,48 @@ const onHangup = async params => {
 const onText = async params => {
   log('Logging text message with params %j', params)
 
-  // const [target, contactor] = await Promise.all([
-  //   getContactor(params),
-  //   getTarget(params)
-  // ])
-  return 'hi'
+  const {Body, From, FromCity, FromCountry, FromState, FromZip, To, FromName, SmsMessageSid} = params
+
+  const as_if_call = {
+    FromCity,
+    FromZip,
+    FromState,
+    CallerName: FromName,
+    Caller: From,
+    Called: To
+  }
+
+  const [target, contactor] = await Promise.all([
+    getContactor(as_if_call),
+    getTarget(as_if_call)
+  ])
+
+  const contact = {
+    target,
+    contactor,
+    custom_fields: {body: Body},
+    identifiers: [`twilio:${SmsMessageSid}`],
+    origin_system: 'twilio',
+    action_date: new Date(),
+    contact_type: 'sms',
+    status_code: 'success',
+    success: true
+  }
+
+  return await new Promise((resolve, reject) =>
+    request
+      .post(EXTERNAL_WEBHOOK_URL + '/record-contact')
+      .send({ contact })
+      .end((err, res) => {
+        if (err) {
+          log('Could not record contact: %j', err)
+          return reject(err)
+        }
+
+        log('Successfully added contact %s', res.body.id)
+        return resolve(res.body)
+      })
+  )
 }
 
-module.exports = { onHangup, onRecorded }
+module.exports = { onHangup, onRecorded, onText }
